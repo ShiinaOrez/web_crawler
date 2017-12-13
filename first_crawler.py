@@ -12,7 +12,7 @@ headers=[("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/
 
 req=request.Request("https://github.com")
 
-req.add_header(headers)
+req.add_header(headers,[("shiina"),("orez")])
 
 data=request.urlopen(req).read()
 
