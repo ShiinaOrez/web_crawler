@@ -6,13 +6,13 @@ proxy=request.ProxyHandler({"http":"localhost:9999"})
 opener=request.build_opener(proxy,request.HTTPHandler)
 
 request.install_opener(opener)
-
+"""
 headers=[("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"),
 	("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36")]
-
+"""
 req=request.Request("https://github.com")
 
-req.add_header(headers,[("shiina"),("orez")])
+req.add_header("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36")
 
 data=request.urlopen(req).read()
 
