@@ -3,23 +3,19 @@
 import requests
 from bs4 import BeautifulSoup
 
+def get_value(s,x):
+    for input in s.find_all('input'):
+        if input.get('name') == x :
+            return input.get('value')
+
 url='https://account.ccnu.edu.cn/cas/login'
 
 r=requests.get(url)
-
-html_doc=r.text
-s=BeautifulSoup(html_doc,'html.parser',from_encoding='utf-8')
-for input in s.find_all('input'):
-    if input.get('name') == 'lt':
-        lt=input.get('value')
-    if input.get('name') == 'execution':
-        exe=input.get('value')
-
+s=BeautifulSoup(r.text,'html.parser',from_encoding='utf-8')
+lt=get_value(s,'lt')
+exe=get_value(s,'execution')
 setc=r.headers.get('set-cookie')
-
 jid=setc[0:49]
-
-print (setc)
 
 payload={
     "username":'2017211712',
@@ -48,4 +44,17 @@ headers={
 
 r=requests.post(url,data=payload,headers=headers)
 
-print (r.headers,r.status_code)
+print ("""
+
+
+""")
+print ('=====account.ccnu.edu.cn=====')
+print ('======response.headers=======')
+
+head=r.headers
+for i in head:
+    print ("||"+i+"||  --->  "+head[i])
+
+print ('=============over===========')
+print ('''
+''')
