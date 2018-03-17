@@ -58,3 +58,6 @@ for i in head:
 print ('=============over===========')
 print ('''
 ''')
+
+print (lt)
+print (exe)
