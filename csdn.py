@@ -3,36 +3,32 @@ import re
 from bs4 import BeautifulSoup
 
 url_prefix="https://blog.csdn.net/"
+url_rest="/article/list/"
 
 writer_name=input("input the writer_name:")
 
-url=url_prefix+writer_name
+url=url_prefix+writer_name+url_rest
 
-blog=requests.get(url)
+f=open(writer_name+'_articles.txt','w')
 
-print (blog.status_code)
-
-blog_text=blog.text
-
-s=BeautifulSoup(blog_text,'html.parser')
-
-pat=re.compile('\s')
-
-for arti in s.find_all('li',class_='blog-unit'):
-    print ("""
-==========""")
-    print ('the article url:',arti.a.attrs.get('href'))
-    title=str(arti.a.h3.text)
-    span=arti.a.h3.span
-    if span is not None :
-        title=title[16:]
-    else: title=title[7:] 
-    print ('the article title:',title)
-    div=arti.div.div
-    for d in div :
-        if d.span is not None :
-            if "read" in d.i.class_:
-                print ('visits:',d.span.text)
-            if "pinglun" in d.i.class_:
-                print ('comments:',d.span.text)
-
+for i in range(1,5):
+    blog=requests.get(url+str(i))
+    print (blog.status_code)
+    blog_text=blog.text
+    s=BeautifulSoup(blog_text,'html.parser')
+    for arti in s.find_all('li',class_='blog-unit'):
+        f.write("""
+=========="""+'\n')
+        f.writelines('the article url:'+str(arti.a.attrs.get('href'))+'\n')
+        title=str(arti.a.h3.text)
+        span=arti.a.h3.span
+        if span is not None :
+            title=title[16:]
+        else: title=title[7:] 
+        f.writelines('the article title:'+str(title)+'\n')
+        for div in arti.div.div.find_all('div'):
+            if div.i is not None:
+                if 'icon-read' in div.i.attrs.get('class') :
+                    f.writelines('visits:'+str(div.span.text)+'\n')
+                if 'icon-pinglun' in div.i.attrs.get('class') :
+                    f.writelines('comments:'+str(div.span.text)+'\n')
