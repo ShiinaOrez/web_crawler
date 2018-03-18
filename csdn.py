@@ -23,9 +23,16 @@ for arti in s.find_all('li',class_='blog-unit'):
 ==========""")
     print ('the article url:',arti.a.attrs.get('href'))
     title=str(arti.a.h3.text)
-    re.sub(pat,"",title)
+    span=arti.a.h3.span
+    if span is not None :
+        title=title[16:]
+    else: title=title[7:] 
     print ('the article title:',title)
+    div=arti.div.div
+    for d in div :
+        if d.span is not None :
+            if "read" in d.i.class_:
+                print ('visits:',d.span.text)
+            if "pinglun" in d.i.class_:
+                print ('comments:',d.span.text)
 
-ss="		   ss		"
-re.sub(pat,"",ss)
-print (ss)
