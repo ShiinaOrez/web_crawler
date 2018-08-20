@@ -10,5 +10,5 @@ def downloader(url,num,tail):
         ('Referer',url),
     ]
     urllib.request.install_opener(opener)
-    urllib.request.urlretrieve(url,'img'+num+tail)
-    return 'img'+num+tail
+    urllib.request.urlretrieve(url,'TEST'+num+tail)
+    return 'TEST'+tail

@@ -1,5 +1,4 @@
 import login,url,download
-import os
 
 username=input("your pixiv account: ")
 password=input("your pixiv password: ")
@@ -21,7 +20,7 @@ while True:
             jpgFlag=False
         else:
             jpgFlag=True
-            file_name=download.downloader(_data['img_url'],str(Iid)+'_p'+str(counter),'.jpg')
+            file_name=download.downloader(_data['img_url'],str(counter),'.jpg')
             print(file_name+' download completed!')
         
         _data=url.get_whole_url(session,base_url,str(counter),'.png')
@@ -29,14 +28,10 @@ while True:
             pngFlag=False
         else:
             pngFlag=True
-            file_name=download.downloader(_data['img_url'],str(Iid)+'_p'+str(counter),'.png')
+            file_name=download.downloader(_data['img_url'],str(counter),'.png')
             print(file_name+' download completed!')
         counter+=1
     
     Continue=input('Do you want download next illust?(Y/N)')
     if Continue is 'N' or 'n':
         break
-    else:
-        continue
-
-os.system('rm -rf __pycache__/')
