@@ -19,11 +19,12 @@ def get_base_url(s,iid):
     for img in imgs:
         src=str(img.get('src'))
         if "_master" in src:
+            title=str(img.get('title'))
             a=src.find("img/")
             b=src.find("_p")
             base_url="https://i.pximg.net/img-original/"+src[a:b]+"_p"
     
-    return base_url
+    return {'base_url': base_url, 'title': title,}
 
 def get_whole_url(s,base_url,num,tail_url):
     whole_url=base_url+num+tail_url
@@ -34,3 +35,12 @@ def get_whole_url(s,base_url,num,tail_url):
         'status_code': response.status_code,
     }
     return return_data
+
+def get_illuster_name(s):
+    a=s.find('/')
+    return s[a+1:]
+
+
+def get_illust_title(s):
+    a=s.find('/')
+    return s[:a]
