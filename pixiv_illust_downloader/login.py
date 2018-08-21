@@ -7,6 +7,9 @@ from http import cookies
 headers={
     'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36',
     'Referer': '',
+    'accept': 'application/json',
+    'accept-encoding': 'gzip, deflate, br',
+    'accept-language': 'zh-CN,zh;q=0.9',
 }
 
 datas = {
@@ -48,16 +51,16 @@ def login(username,password):
 
     # set cookies
     s.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
-    c=open('COOKIE.py','w')
-    C=cookies.SimpleCookie()
-    print (C)
+#    c=open('COOKIE.py','w')
+#    C=http.cookiejar.CookieJar()
+#    print (C)
 #   c.writelines('cookies='+str(http.cookiejar.LWPCookieJar(filename='cookies')))
     return s
 
 def reload():
-    c=COOKIE.cookies
+#    c=COOKIE.cookies
     s=requests.Session()
-    s.cookies=c
+#    s.cookies=c
     s.headers=headers
     response=s.get(daily_url)
     if response.status_code == 200:

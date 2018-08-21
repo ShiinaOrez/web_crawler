@@ -11,6 +11,8 @@ def get_base_url(s,iid):
     response=s.get("https://www.pixiv.net/member_illust.php?mode=medium&illust_id="+str(iid),headers=headers)
     print(response)
 
+    if response.status_code == 404:
+        return {'msg': 'illust is not exist or be deleted!'}
     # use bs4 to resolve HTML text
     soup=BeautifulSoup(response.text,'html.parser')
     imgs=soup.find_all('img')
@@ -44,3 +46,34 @@ def get_illuster_name(s):
 def get_illust_title(s):
     a=s.find('/')
     return s[:a]
+
+#def test(s,id,base):
+#    url='https://www.pixiv.net/ajax/user/'+str(id)+'/profile/all'
+#    headers['Referer']=base+str(1)
+#    response=s.get(url,headers=headers)
+#    print (response.json)
+
+def get_illusts(s,params):
+    base_url='https://www.pixiv.net/member_illust.php'
+
+    headers['Referer']='https://www.pixiv.net'
+    response=s.get(base_url,params=params,headers=headers)
+#    print (response.text)
+    l=list([])
+    if response.status_code != 200:
+        return {list: None,'status_code': response.status_code} 
+    else:
+        soup=BeautifulSoup(response.text,'html.parser')
+        imgs=soup.find_all('img')
+        for img in imgs:
+            img=str(img)
+            if 'user' not in img:
+                b=img.find('_p')
+                img=img[:b]
+                a=img.rindex('/')
+                iid=img[a+1:]
+                l.append(iid)
+        print (l)
+        return {'list': l,'status_code': response.status_code}
+
+    
