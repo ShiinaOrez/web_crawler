@@ -9,15 +9,16 @@ headers=login.headers
 def get_base_url(s,iid):
     # get page
     response=s.get("https://www.pixiv.net/member_illust.php?mode=medium&illust_id="+str(iid),headers=headers)
-    print(response)
+    print ('Illust: '+str(iid)+' '+str(response)+'▷')
 
     if response.status_code == 404:
-        return {'msg': 'illust is not exist or be deleted!'}
+        return {'msg': '▷-▷-▷>illust is not exist or be deleted!'}
     # use bs4 to resolve HTML text
     soup=BeautifulSoup(response.text,'html.parser')
     imgs=soup.find_all('img')
 
     base_url=''
+    title=''
     for img in imgs:
         src=str(img.get('src'))
         if "_master" in src:
@@ -25,6 +26,7 @@ def get_base_url(s,iid):
             a=src.find("img/")
             b=src.find("_p")
             base_url="https://i.pximg.net/img-original/"+src[a:b]+"_p"
+            break
     
     return {'base_url': base_url, 'title': title,}
 
@@ -53,27 +55,42 @@ def get_illust_title(s):
 #    response=s.get(url,headers=headers)
 #    print (response.json)
 
-def get_illusts(s,params):
+def get_illusts(c,params):
     base_url='https://www.pixiv.net/member_illust.php'
 
     headers['Referer']='https://www.pixiv.net'
-    response=s.get(base_url,params=params,headers=headers)
-#    print (response.text)
+    s=requests.Session()
+    s.cookies=c
+    response=s.get('https://www.pixiv.net/ajax/user/'+str(params['id'])+'/profile/all',headers=headers) #base_url,params=params,headers=headers)
+    s=login.resetcookie(s,response.headers['set-cookie'])
+    data=response.json()
+
     l=list([])
     if response.status_code != 200:
-        return {list: None,'status_code': response.status_code} 
+        return {'list': None,'status_code': response.status_code} 
     else:
-        soup=BeautifulSoup(response.text,'html.parser')
-        imgs=soup.find_all('img')
-        for img in imgs:
-            img=str(img)
-            if 'user' not in img:
-                b=img.find('_p')
-                img=img[:b]
-                a=img.rindex('/')
-                iid=img[a+1:]
-                l.append(iid)
-        print (l)
-        return {'list': l,'status_code': response.status_code}
+        # version---1.2
+#        soup=BeautifulSoup(response.text,'html.parser')
+#        divs=soup.find_all("div", {"class": "P1uthkK"})
+#        for div in divs:
+#            sty=str(div['style'])
+#            if 'user' not in sty:
+#            b=sty.find('_p')
+#            sty=sty[:b]
+#            a=sty.rindex('/')
+#            iid=sty[a+1:]
+#            l.append(iid)
+#        print (l)
+        # version---2.0
+        illusts=data.get('body').get('illusts')
+#        for illust in illusts:
+#            print (illust)
+#            iid=illust.get('id')
+#            title=illust.get('title')
+#            l.append({
+#                'id': iid,
+#                'title': title,
+#            })
+        return {'list': illusts,'status_code': response.status_code,'cookie':s.cookies}
 
     

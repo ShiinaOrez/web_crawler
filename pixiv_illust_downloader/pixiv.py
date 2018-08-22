@@ -2,6 +2,7 @@
 import urllib.request
 import requests
 import re
+import time
 import http.cookiejar
 from bs4 import BeautifulSoup
 
@@ -41,7 +42,7 @@ s.headers = headers
 # 获取登录页面
 res = s.get(login_url) #, params=params)
 
-# 获取post_key
+# 获取post_key 
 pattern = re.compile(r'name="post_key" value="(.*?)">')
 r = pattern.findall(res.text)
 datas['post_key'] = r[0]
@@ -50,11 +51,41 @@ datas['post_key'] = r[0]
 result = s.post(post_url, data=datas)
 
 # 打印出json信息
-#print (result.headers)
+print (result.headers['set-cookie'])
 #print(result.json())
 
+setcookie=result.headers['set-cookie']
+a=setcookie.find('secure; HttpOnly,')
+setcookie=setcookie[:a]+setcookie[a+18:]
+b=setcookie.find('secure; HttpOnly')
+setcookie=setcookie[:b]+setcookie[b+16:]
+c=setcookie.find('HttpOnly,')
+setcookie=setcookie[:c]+setcookie[c+10:]
+seq=setcookie.split('; ')
+counter=1
+for se in seq:
+    if counter == 7:
+        break
+    a=se.find('=')
+    sa=se[:a]
+    sb=se[a+1:]
+    s.cookies[sa]=sb
+
 #ss.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
-s.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
+#s.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
+#s.cookies = result.headers['set-cookie'].join('; ')
+#print (s.cookies)
+base_url='https://www.pixiv.net/member_illust.php'
+params={
+    'id': 2211832,
+    'type': 'illust',
+}
+headers['Referer']='https://www.pixiv.net'
+response=s.get(base_url,params=params,headers=headers)
+print (response)
+time.sleep(1)
+print (response.text)
+
 Iid=input("Illust ID:")
 response=s.get("https://www.pixiv.net/member_illust.php?mode=medium&illust_id="+str(Iid),headers=headers)
 

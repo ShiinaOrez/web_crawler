@@ -19,7 +19,7 @@ def downloader(url,illuster_name,name,tail):
         os.makedirs(file_path)
     file_name=file_path+name+'_'+tail
     if os.path.isfile(file_name): 
-        print ('image already exist = =')
+        print ('▷-▷-▷>Image already exist = =')
         return name+'_'+tail
 #    opener = urllib.request.build_opener()
 #    opener.addheaders = [

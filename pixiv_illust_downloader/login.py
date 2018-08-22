@@ -27,6 +27,24 @@ login_url = 'https://accounts.pixiv.net/login' # login url
 post_url = 'https://accounts.pixiv.net/api/login?lang=en' # url to get post_key
 daily_url = 'https://www.pixiv.net/ranking.php?mode=daily'
 
+def resetcookie(session,s):
+    a=s.find('secure; HttpOnly,')
+    s=s[:a]+s[a+18:]
+    b=s.find('secure; HttpOnly')
+    s=s[:b]+s[b+16:]
+    c=s.find('HttpOnly,')
+    s=s[:c]+s[c+10:]
+    seq=s.split('; ')
+    counter=1
+    for se in seq:
+        if counter == 7:
+            break
+        a=se.find('=')
+        sa=se[:a]
+        sb=se[a+1:]
+        session.cookies[sa]=sb
+    return session
+
 def login(username,password):
     # set account info
     datas['pixiv_id']=username
@@ -45,17 +63,25 @@ def login(username,password):
 
     # login
     response=s.post(post_url,data=datas)
+    setcookie=response.headers['set-cookie']
+    s=resetcookie(s,setcookie)
+#    print (s.cookies)
+
+# try to get personal config page and successully!
+#    res=s.get('https://www.pixiv.net/setting_user.php',headers=headers,)
+#    print (res.text)
+
     if response.status_code != 200:
-        print ('please check your pixiv ID and password!')
+        print ('▷-▷-▷>please check your pixiv ID and password!')
         return False
 
-    # set cookies
-    s.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
+# set cookies
+#    s.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
 #    c=open('COOKIE.py','w')
 #    C=http.cookiejar.CookieJar()
 #    print (C)
 #   c.writelines('cookies='+str(http.cookiejar.LWPCookieJar(filename='cookies')))
-    return s
+    return s.cookies
 
 def reload():
 #    c=COOKIE.cookies
@@ -64,6 +90,6 @@ def reload():
     s.headers=headers
     response=s.get(daily_url)
     if response.status_code == 200:
-        return {'code': True, 'session':s}
+        return {'code': True, 'cookie':s.cookies}
     else:
-        return {'code': False, 'session':None}
+        return {'code': False, 'cookie':None}
