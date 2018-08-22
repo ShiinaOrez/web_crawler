@@ -45,4 +45,7 @@
 	+ 增加批量下载画师热门作品
 + version 1.2   /2018.8.22
 	+ fix the bug of function 2, change the download tool **urllib** to **requests**
++ version 2.0   /2018.8.22
+	+ change the request session, more stable. Change get ID's method from bs4 to JSON.
+
 -----
