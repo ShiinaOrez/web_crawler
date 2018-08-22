@@ -49,6 +49,9 @@ def run_by_iname(session,illuster):
 #        counter+=1
     illust_list=data['list']
     for id in illust_list:
+        if id is '':
+            print ('sorry we can not download GIT image now QAQ')
+            continue
         run_by_iid(session,id)
 
 class manager(object):
