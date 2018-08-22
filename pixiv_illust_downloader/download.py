@@ -18,7 +18,7 @@ def downloader(url,illuster_name,name,tail):
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     file_name=file_path+name+'_'+tail
-    if os.path.isfile('./'+name+tail): 
+    if os.path.isfile(file_name): 
         print ('image already exist = =')
         return name+'_'+tail
 #    opener = urllib.request.build_opener()

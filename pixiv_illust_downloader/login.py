@@ -1,7 +1,7 @@
 import requests
 import re
 import http.cookiejar
-import COOKIE
+#import COOKIE
 from http import cookies
 
 headers={

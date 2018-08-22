@@ -1,5 +1,6 @@
 import login,url,download
 import os
+import time
 
 def run_by_iid(session,Iid):
 # get Illust ID
@@ -17,6 +18,7 @@ def run_by_iid(session,Iid):
     jpgFlag=True
     pngFlag=True
     while jpgFlag or pngFlag:
+        time.sleep(1)
         _data=url.get_whole_url(session,base_url,str(counter),'.jpg')
         if _data['status_code'] != 200:
             jpgFlag=False
