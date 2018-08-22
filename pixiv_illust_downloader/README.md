@@ -39,9 +39,10 @@
 -----
 ## 版本信息
 
-+ version1.0   /2018.8.21
++ version 1.0   /2018.8.21
 	+ 初步开发，开放根据作品ID下载作品
-+ version1.1   /2018.8.21
++ version 1.1   /2018.8.21
 	+ 增加批量下载画师热门作品
-
++ version 1.2   /2018.8.22
+	+ fix the bug of function 2, change the download tool **urllib** to **requests**
 -----
