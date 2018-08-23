@@ -47,5 +47,9 @@
 	+ fix the bug of function 2, change the download tool **urllib** to **requests**
 + version 2.0   /2018.8.22
 	+ change the request session, more stable. Change get ID's method from bs4 to JSON.
++ version 2.1   /2018.8.23
+	+ version 2.0's bug: when you use func2 over and again, you will BOOM
+	+ remove a line code from get json
+	+ bug is DONE 
 
 -----
