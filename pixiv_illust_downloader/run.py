@@ -53,19 +53,21 @@ def run_by_iid(session,Iid):
             print()
         counter+=1
 
-def run_by_iname(cookie,illuster,Max):
+def run_by_iname(M,cookie,illuster,Max):
     counter=1
     params={
         'id': illuster,
         'page': 1,
         'type': illuster,
     }
+    print(cookie)
     data=url.get_illusts(cookie,params) # list status_code cookie
     if data['status_code'] != 200:
         print ('▷-▷-▷>Something Wrong!')
         return
     illust_list=data['list']
-
+    M.COOKIE=data['cookie']
+    print(M.COOKIE)
     session=requests.Session()
     cookie=reload()
     session.cookies=cookie
@@ -79,6 +81,7 @@ def run_by_iname(cookie,illuster,Max):
         run_by_iid(session,int(d))
         counter+=1
 class manager(object):
+    COOKIE={'a':None,'b':None}
     def title(self):
         print ("-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷")
         print ("WELCOME TO USE PIXIV ILLUST DOWNLOADER")
@@ -105,12 +108,14 @@ class manager(object):
             if type == '2':
                 cookie=signin()
                 while True:
+                    print(cookie)
                     Iid=input("Illuster ID: ")
                     Max=input("How many illusts do you want to download? ")
-                    run_by_iname(cookie,Iid,int(Max))
+                    run_by_iname(self,cookie,Iid,int(Max))
                     Continue=input('Do you want download next illuster?(Y/N) ')
                     if Continue is 'N' or Continue is 'n':
                         break
+                    cookie=self.COOKIE
             if type == '3':
                 break
 

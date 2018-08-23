@@ -56,16 +56,14 @@ def get_illust_title(s):
 #    print (response.json)
 
 def get_illusts(c,params):
-    base_url='https://www.pixiv.net/member_illust.php'
-
     headers['Referer']='https://www.pixiv.net'
     s=requests.Session()
     s.cookies=c
+    print(s.cookies)
     response=s.get('https://www.pixiv.net/ajax/user/'+str(params['id'])+'/profile/all',headers=headers) #base_url,params=params,headers=headers)
-    s=login.resetcookie(s,response.headers['set-cookie'])
+#    print (response.headers)
+#    s=login.resetcookie(s,response.headers['set-cookie'])
     data=response.json()
-
-    l=list([])
     if response.status_code != 200:
         return {'list': None,'status_code': response.status_code} 
     else:
@@ -91,6 +89,7 @@ def get_illusts(c,params):
 #                'id': iid,
 #                'title': title,
 #            })
+        print (s.cookies)
         return {'list': illusts,'status_code': response.status_code,'cookie':s.cookies}
 
     
