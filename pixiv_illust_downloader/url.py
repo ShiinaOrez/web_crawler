@@ -6,10 +6,11 @@ import login
 
 headers=login.headers
 
-def get_base_url(s,iid):
+def get_base_url(s,iid,logger):
     # get page
     response=s.get("https://www.pixiv.net/member_illust.php?mode=medium&illust_id="+str(iid),headers=headers)
-    print ('Illust: '+str(iid)+' '+str(response)+'▷')
+    if logger:
+        print ('Illust: '+str(iid)+' '+str(response)+'▷')
 
     if response.status_code == 404:
         return {'msg': '▷-▷-▷>illust is not exist or be deleted!'}
@@ -55,11 +56,17 @@ def get_illust_title(s):
 #    response=s.get(url,headers=headers)
 #    print (response.json)
 
+
 def get_illusts(c,params):
     headers['Referer']='https://www.pixiv.net'
     s=requests.Session()
     s.cookies=c
-    print(s.cookies)
+
+    response=s.get('https://www.pixiv.net/member.php?id=671593/',headers=headers)
+    s=login.resetcookie(s,response.headers['set-cookie'])
+#    print(response.text)
+
+#    print(s.cookies)
     response=s.get('https://www.pixiv.net/ajax/user/'+str(params['id'])+'/profile/all',headers=headers) #base_url,params=params,headers=headers)
 #    print (response.headers)
 #    s=login.resetcookie(s,response.headers['set-cookie'])
@@ -89,7 +96,7 @@ def get_illusts(c,params):
 #                'id': iid,
 #                'title': title,
 #            })
-        print (s.cookies)
+#        print (s.cookies)
         return {'list': illusts,'status_code': response.status_code,'cookie':s.cookies}
 
     

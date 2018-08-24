@@ -3,7 +3,7 @@
 
 |版本|状态|开发者|开源|
 |----|----|----|---|
-|v2.1|正在开发|ShiinaOrez|√|
+|v2.2|正在开发|ShiinaOrez|√|
 
 -----
 ## 简介
@@ -51,5 +51,7 @@
 	+ version 2.0's bug: when you use func2 over and again, you will BOOM
 	+ remove a line code from get json
 	+ bug is DONE 
++ version 2.2   /2018.8.24
+	+ when you ready to download a illustor's illusts, you will get information
 
 -----

@@ -2,6 +2,7 @@ import login,url,download
 import os
 import time
 import requests
+import profile
 
 def reload():
     re=login.reload()
@@ -19,7 +20,7 @@ def signin():
 
 def run_by_iid(session,Iid):
 # get Illust ID
-    url_and_title=url.get_base_url(session,Iid)
+    url_and_title=url.get_base_url(session, Iid, True)
     try:
         print (url_and_title['msg'])
         return
@@ -53,24 +54,39 @@ def run_by_iid(session,Iid):
             print()
         counter+=1
 
-def run_by_iname(M,cookie,illuster,Max):
+def run_by_iname(M,cookie,illuster):
     counter=1
     params={
         'id': illuster,
         'page': 1,
         'type': illuster,
     }
-    print(cookie)
+#    print(cookie)
     data=url.get_illusts(cookie,params) # list status_code cookie
     if data['status_code'] != 200:
         print ('▷-▷-▷>Something Wrong!')
         return
     illust_list=data['list']
     M.COOKIE=data['cookie']
-    print(M.COOKIE)
+#    print(M.COOKIE)
     session=requests.Session()
     cookie=reload()
     session.cookies=cookie
+    print ()
+    illustor_name=''
+    num=0
+    for d in illust_list:
+        num+=1
+        if num == 1:
+            illustor_name=profile.get_person_name(int(d))
+    print("""--------------------------
+||Illustor Name: %s
+||Illustor ID: %s
+||Number of illusts: %s
+--------------------------
+""" % (illustor_name,illuster,str(num)))
+    Max=input("How many illusts do you want to download? ")
+    Max=int(Max)
     for d in illust_list:
         if counter > Max:
             break
@@ -108,10 +124,9 @@ class manager(object):
             if type == '2':
                 cookie=signin()
                 while True:
-                    print(cookie)
+#                    print(cookie)
                     Iid=input("Illuster ID: ")
-                    Max=input("How many illusts do you want to download? ")
-                    run_by_iname(self,cookie,Iid,int(Max))
+                    run_by_iname(self,cookie,Iid)
                     Continue=input('Do you want download next illuster?(Y/N) ')
                     if Continue is 'N' or Continue is 'n':
                         break
