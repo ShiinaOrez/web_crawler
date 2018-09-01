@@ -1,8 +1,12 @@
 import login,url,download
 import os
+import sys
 import time
 import requests
 import profile
+
+Username=''
+Password=''
 
 def reload():
     re=login.reload()
@@ -10,10 +14,11 @@ def reload():
     return cookie
 
 def signin():
-    username=input("Your pixiv account: ")
-    password=input("Your pixiv password: ")
+    Username=input("Your pixiv account: ")
+    Password=input("Your pixiv password: ")
             # get have cookies requests.Session()
-    cookie=login.login(username,password)
+    
+    cookie=login.login(Username,Password)
     print('    ===================')
     print('===>login successfully!')
     return cookie
@@ -67,10 +72,8 @@ def run_by_iname(M,cookie,illuster):
         print ('▷-▷-▷>Something Wrong!')
         return
     illust_list=data['list']
-    M.COOKIE=data['cookie']
-#    print(M.COOKIE)
     session=requests.Session()
-    cookie=reload()
+    cookie=data['cookie']
     session.cookies=cookie
     print ()
     illustor_name=''
@@ -78,15 +81,17 @@ def run_by_iname(M,cookie,illuster):
     for d in illust_list:
         num+=1
         if num == 1:
-            illustor_name=profile.get_person_name(int(d))
+            illustor_name=profile.get_person_name(session, illuster)
     print("""--------------------------
-||Illustor Name: %s
-||Illustor ID: %s
+||Illustor Name:     %s
+||Illustor ID:       %s
 ||Number of illusts: %s
 --------------------------
 """ % (illustor_name,illuster,str(num)))
     Max=input("How many illusts do you want to download? ")
     Max=int(Max)
+    cookie=reload()
+    session.cookies=cookie
     for d in illust_list:
         if counter > Max:
             break
@@ -126,6 +131,7 @@ class manager(object):
                 while True:
 #                    print(cookie)
                     Iid=input("Illuster ID: ")
+                    print (Iid, str(Iid))
                     run_by_iname(self,cookie,Iid)
                     Continue=input('Do you want download next illuster?(Y/N) ')
                     if Continue is 'N' or Continue is 'n':

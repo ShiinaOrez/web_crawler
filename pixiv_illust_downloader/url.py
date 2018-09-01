@@ -62,7 +62,7 @@ def get_illusts(c,params):
     s=requests.Session()
     s.cookies=c
 
-    response=s.get('https://www.pixiv.net/member.php?id=671593/',headers=headers)
+    response=s.get('https://www.pixiv.net/member.php?id=/'+str(params['id']),headers=headers)
     s=login.resetcookie(s,response.headers['set-cookie'])
 #    print(response.text)
 
