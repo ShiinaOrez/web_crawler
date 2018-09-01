@@ -53,5 +53,7 @@
 	+ bug is DONE 
 + version 2.2   /2018.8.24
 	+ when you ready to download a illustor's illusts, you will get information
++ version 2.3   /2018.9.1
+	+ fixed how to get illustor's name
 
 -----
