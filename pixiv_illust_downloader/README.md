@@ -3,7 +3,7 @@
 
 |版本|状态|开发者|开源|
 |----|----|----|---|
-|v2.3|正在开发|ShiinaOrez|√|
+|v2.4|正在开发|ShiinaOrez|√|
 
 -----
 ## 简介
@@ -55,5 +55,7 @@
 	+ when you ready to download a illustor's illusts, you will get information
 + version 2.3   /2018.9.1
 	+ fixed how to get illustor's name
++ version 2.4   /2018.9.15
+	+ code review, delete a lot of useless code
 
 -----
