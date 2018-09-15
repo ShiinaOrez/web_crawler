@@ -16,15 +16,14 @@ def reload():
 def signin():
     Username=input("Your pixiv account: ")
     Password=input("Your pixiv password: ")
-            # get have cookies requests.Session()
-    
+
     cookie=login.login(Username,Password)
     print('    ===================')
     print('===>login successfully!')
     return cookie
 
 def run_by_iid(session,Iid):
-# get Illust ID
+
     url_and_title=url.get_base_url(session, Iid, True)
     try:
         print (url_and_title['msg'])
@@ -129,7 +128,6 @@ class manager(object):
             if type == '2':
                 cookie=signin()
                 while True:
-#                    print(cookie)
                     Iid=input("Illuster ID: ")
                     print (Iid, str(Iid))
                     run_by_iname(self,cookie,Iid)

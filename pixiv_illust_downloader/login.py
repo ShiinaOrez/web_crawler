@@ -23,11 +23,15 @@ datas = {
     'return_to': 'https://www.pixiv.net/'
 }
 
-login_url = 'https://accounts.pixiv.net/login' # login url
-post_url = 'https://accounts.pixiv.net/api/login?lang=en' # url to get post_key
-daily_url = 'https://www.pixiv.net/ranking.php?mode=daily'
+LOGIN_URL = 'https://accounts.pixiv.net/login'
+POST_URL = 'https://accounts.pixiv.net/api/login?lang=en'
+DAILY_URL = 'https://www.pixiv.net/ranking.php?mode=daily'
 
 def resetcookie(session,s):
+    # session : requests.Session() : None
+    # s       : [string]cookie     : SET-COOKIE
+
+    ''' get the available set-cookie '''
     a=s.find('secure; HttpOnly,')
     s=s[:a]+s[a+18:]
     b=s.find('secure; HttpOnly')
@@ -46,49 +50,45 @@ def resetcookie(session,s):
     return session
 
 def login(username,password):
-    # set account info
+    # username : string : pixiv account username
+    # password : string : pixiv account password
+
+    ''' try to login www.pixiv.net '''
     datas['pixiv_id']=username
     datas['password']=password
 
     s=requests.Session()
     s.headers = headers
 
-    # get login page
-    loginPage = s.get(login_url)
+    ''' get login page '''
+    loginPage = s.get(LOGIN_URL)
 
-    # get post_key
+    ''' get the post_key '''
     pattern = re.compile(r'name="post_key" value="(.*?)">')
     postKeys=pattern.findall(loginPage.text)
     datas['post_key'] = postKeys[0]
 
-    # login
-    response=s.post(post_url,data=datas)
-    setcookie=response.headers['set-cookie']
-    s=resetcookie(s,setcookie)
-#    print (s.cookies)
+    ''' make a post request to login '''
+    response=s.post(POST_URL,data=datas)
+    s=resetcookie(s,response.headers['set-cookie'])
 
-# try to get personal config page and successully!
-#    res=s.get('https://www.pixiv.net/setting_user.php',headers=headers,)
-#    print (res.text)
-
+    return_data = {
+        "isSignIn": True,
+        "cookie": None,
+    }
     if response.status_code != 200:
         print ('▷-▷-▷>please check your pixiv ID and password!')
-        return False
+        return_data['isSignIn'] = False
+    return_data['cookie'] = s.cookies
 
-# set cookies
-#    s.cookies = http.cookiejar.LWPCookieJar(filename='cookies')
-#    c=open('COOKIE.py','w')
-#    C=http.cookiejar.CookieJar()
-#    print (C)
-#   c.writelines('cookies='+str(http.cookiejar.LWPCookieJar(filename='cookies')))
-    return s.cookies
+    return return_data
+
 
 def reload():
-#    c=COOKIE.cookies
+    ''' get cookie to download a illust '''
     s=requests.Session()
-#    s.cookies=c
     s.headers=headers
-    response=s.get(daily_url)
+    response=s.get(DAILY_URL)
     if response.status_code == 200:
         return {'code': True, 'cookie':s.cookies}
     else:
