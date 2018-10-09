@@ -120,7 +120,7 @@ def run_by_iname(cookie,illuster):
 
 
 class manager(object):
-''' just for run '''
+
     def title(self):
         ''' print the information '''
         print ("-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷-▷")
