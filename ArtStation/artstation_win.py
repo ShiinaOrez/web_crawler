@@ -59,6 +59,9 @@ for illust in data:
                 if 'jpg' in large_url:
                     tail = '.jpg'
                 file_name=file_path+name+hash_id+'_'+str(num)+tail
+                file_name = file_name.replace('"','')
+                file_name = file_name.replace('/','')
+                file_name = file_name.replace('"','')
 #                print(file_name)
                 if os.path.isfile(file_name): 
                     print ('>Image already exist = =')
