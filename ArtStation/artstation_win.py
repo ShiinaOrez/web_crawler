@@ -52,10 +52,10 @@ def downloadOneIllustor(url, isAll):
     pages = count//50
     if count%50 != 0:
         pages+=1
-    print (illustor_name+" have "+ str(count) + ' illusts')
+    print (_printTab2,"|"+illustor_name+" have "+ str(count) + ' illusts')
     number = count
     if not isAll:
-        number = int(input(_printTab2+'how many illusts you want to download to your computer?'))
+        number = int(input(_printTab2+'|how many illusts you want to download to your computer?'))
 
     for i in range(pages):
         response = session.get(j+str(i+1), headers = headers)
@@ -113,7 +113,7 @@ def downloadOneIllustor(url, isAll):
                     open(file_name, 'wb').write(r.content)
                 except:
                     print(_printTab3, "WARNNING: SOMETHING MISTAKE")
-                print (_printTab3,name+hash_id+'_'+str(num)+tail+' download successfully!')
+                print (_printTab3,"|"+name+hash_id+'_'+str(num)+tail+' download successfully!')
 
 
 if __name__ == "__main__":
