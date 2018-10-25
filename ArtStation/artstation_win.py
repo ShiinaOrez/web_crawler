@@ -18,97 +18,97 @@ headers = {
 }
 
 def pre_print():
-	print("____________________________________")
-	print("|_____________DOWNLOAD_____________|")
-	print("|*************________*************|")
-	print("------------------------------------")
+    print("____________________________________")
+    print("|_____________DOWNLOAD_____________|")
+    print("|*************________*************|")
+    print("------------------------------------")
 
 def call_main():
-	linkList = list([])
-	while True:
+    linkList = list([])
+    while True:
         url = input("|Input Link('*' to *STOP*): ")
         if url is "*":
-        	break;
+            break
         else:
             linkList.append(url)
     main_num = len(linkList)
     i = 0
     for link in linkList:
-    	print("|("+str(i+1)+"/"+str(main_num)+")"+"Download Misstion Start:")
-    	downloadOneIllustor(link)
-    	i += 1
+        print("|("+str(i+1)+"/"+str(main_num)+")"+"Download Misstion Start:")
+        downloadOneIllustor(link)
+        i += 1
 
 def downloadOneIllustor(url):
-	illustor_name = url.replace('https://www.artstation.com/','')
-	session = requests.Session()
-	data = list([])
+    illustor_name = url.replace('https://www.artstation.com/','')
+    session = requests.Session()
+    data = list([])
 
-	response = session.get(j+"1", headers = headers)
-	count = response.json().get('total_count')
-	pages = count//50
-	if count%50 != 0:
-    	pages+=1
-	print (illustor_name+" have "+ str(count) + ' illusts')
-	number = int(input('how many illusts you want to download to your computer?'))
-	for i in range(pages):
-    	response = session.get(j+str(i+1), headers = headers)
-    	if response.json().get('data') is None:
-        	continue
-    	for re in response.json().get('data'):
-        	data.append(re)
+    response = session.get(j+"1", headers = headers)
+    count = response.json().get('total_count')
+    pages = count//50
+    if count%50 != 0:
+        pages+=1
+    print (illustor_name+" have "+ str(count) + ' illusts')
+    number = int(input('how many illusts you want to download to your computer?'))
+    for i in range(pages):
+        response = session.get(j+str(i+1), headers = headers)
+        if response.json().get('data') is None:
+            continue
+        for re in response.json().get('data'):
+            data.append(re)
         
-	tot = 1
-	for illust in data:
-    	if tot > number:
-        	print('WORK IS DONE!!')
-        	break
-    	print('('+str(tot)+'/'+str(number)+')')
-    	tot += 1
-    	if illust.get('title') is not None:
-        	cover = illust.get('cover')
-        	hash_id = illust.get('hash_id')
-        	illuster_id = illust.get('user_id')
-        	isImage=True
-        	downloadList=list([])
-        	assert_json_url = project_url+hash_id+'.json'
-        	response = session.get(assert_json_url, headers = headers)
-        	for image in response.json().get('assets'):
-            	large_url = image.get('image_url')
-            	if image.get('has_embedded_player') is False:
-                	downloadList.append(image.get('image_url'))
-        	file_path=basedir+'\\Images\\'+illustor_name+'\\'
-        	if not os.path.exists(file_path):
-            	os.makedirs(file_path)
-        	num=-1
-        	for downloadLink in downloadList:
-            	num+=1
-            	headers['referer'] = illust.get('permalink')
-            	name = illust.get('title')+illust.get('hash_id')
-            	tail = '.png'
-            	if 'jpg' in downloadLink:
-                	tail = '.jpg'
-            	if '.gif' in downloadLink:
-                	tail = '.gif'
-            	file_name=file_path+name+hash_id+'_'+str(num)+tail
+    tot = 1
+    for illust in data:
+        if tot > number:
+            print('WORK IS DONE!!')
+            break
+        print('('+str(tot)+'/'+str(number)+')')
+        tot += 1
+        if illust.get('title') is not None:
+            cover = illust.get('cover')
+            hash_id = illust.get('hash_id')
+            illuster_id = illust.get('user_id')
+            isImage=True
+            downloadList=list([])
+            assert_json_url = project_url+hash_id+'.json'
+            response = session.get(assert_json_url, headers = headers)
+            for image in response.json().get('assets'):
+                large_url = image.get('image_url')
+                if image.get('has_embedded_player') is False:
+                    downloadList.append(image.get('image_url'))
+            file_path=basedir+'\\Images\\'+illustor_name+'\\'
+            if not os.path.exists(file_path):
+                os.makedirs(file_path)
+            num=-1
+            for downloadLink in downloadList:
+                num+=1
+                headers['referer'] = illust.get('permalink')
+                name = illust.get('title')+illust.get('hash_id')
+                tail = '.png'
+                if 'jpg' in downloadLink:
+                    tail = '.jpg'
+                if '.gif' in downloadLink:
+                    tail = '.gif'
+                file_name=file_path+name+hash_id+'_'+str(num)+tail
 
-            	file_name = file_name.replace('"','')
-            	file_name = file_name.replace('/','')
-            	file_name = file_name.replace("'",'')
+                file_name = file_name.replace('"','')
+                file_name = file_name.replace('/','')
+                file_name = file_name.replace("'",'')
                 file_name = file_name.replace('?','')
 
 #               print(file_name)
-            	if os.path.isfile(file_name): 
-                	print ('>Image already exist = =')
-                	continue
+                if os.path.isfile(file_name): 
+                    print ('>Image already exist = =')
+                    continue
 
-            	r=requests.get(downloadLink, headers=headers, allow_redirects=True)
-            	try:
-            		open(file_name, 'wb').write(r.content)
-            	except:
-            		pass
-            	print (name+hash_id+'_'+str(num)+tail+' download successfully!')
+                r=requests.get(downloadLink, headers=headers, allow_redirects=True)
+                try:
+                    open(file_name, 'wb').write(r.content)
+                except:
+                    pass
+                print (name+hash_id+'_'+str(num)+tail+' download successfully!')
 
 
 if __name__ == "__main__":
-	pre_print()
-	call_main()
+    pre_print()
+    call_main()
