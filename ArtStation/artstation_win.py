@@ -4,8 +4,6 @@ import json
 
 basedir=os.path.abspath(os.path.dirname(__file__))
 
-j = 'https://www.artstation.com/users/' + illustor_name + '/projects.json?page='
-
 project_url = "https://www.artstation.com/projects/"
 
 # url = 'https://www.artstation.com/timbougami'
@@ -31,15 +29,20 @@ def call_main():
             break
         else:
             linkList.append(url)
+    check_mode = input("| Mode: Download All ('Y/N')")
+    isAll = False
+    if ('y' in check_mode) or ('Y' in check_mode):
+        isAll = True
     main_num = len(linkList)
     i = 0
     for link in linkList:
         print("|("+str(i+1)+"/"+str(main_num)+")"+"Download Misstion Start:")
-        downloadOneIllustor(link)
+        downloadOneIllustor(link, isAll)
         i += 1
 
-def downloadOneIllustor(url):
+def downloadOneIllustor(url, isAll):
     illustor_name = url.replace('https://www.artstation.com/','')
+    j = 'https://www.artstation.com/users/' + illustor_name + '/projects.json?page='
     session = requests.Session()
     data = list([])
 
@@ -49,7 +52,10 @@ def downloadOneIllustor(url):
     if count%50 != 0:
         pages+=1
     print (illustor_name+" have "+ str(count) + ' illusts')
-    number = int(input('how many illusts you want to download to your computer?'))
+    number = count
+    if not isAll:
+        number = int(input('how many illusts you want to download to your computer?'))
+
     for i in range(pages):
         response = session.get(j+str(i+1), headers = headers)
         if response.json().get('data') is None:
