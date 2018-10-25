@@ -69,7 +69,7 @@ def downloadOneIllustor(url, isAll):
         if tot > number:
             print(_printTab2,'----WORK IS DONE!!----')
             break
-        print(_printTab1,'('+str(tot)+'/'+str(number)+')__')
+        print(_printTab2,'('+str(tot)+'/'+str(number)+')__')
         tot += 1
         if illust.get('title') is not None:
             cover = illust.get('cover')
