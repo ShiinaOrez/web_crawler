@@ -3,11 +3,12 @@ import os
 import json
 
 basedir=os.path.abspath(os.path.dirname(__file__))
-
 project_url = "https://www.artstation.com/projects/"
-
 # url = 'https://www.artstation.com/timbougami'
 # j = 'https://www.artstation.com/users/timbougami/projects.json?page=1'
+_printTab1 = "	"
+_printTab2 = _printTab1*2
+_printTab3 = _printTab1*3
 
 headers = {
     "origin": "https://www.artstation.com",
@@ -29,14 +30,14 @@ def call_main():
             break
         else:
             linkList.append(url)
-    check_mode = input("| Mode: Download All ('Y/N')")
+    check_mode = input("|Mode: Download All ('Y/N')")
     isAll = False
     if ('y' in check_mode) or ('Y' in check_mode):
         isAll = True
     main_num = len(linkList)
     i = 0
     for link in linkList:
-        print("|("+str(i+1)+"/"+str(main_num)+")"+"Download Misstion Start:")
+        print(_printTab1, "|("+str(i+1)+"/"+str(main_num)+")"+"Download Misstion Start:")
         downloadOneIllustor(link, isAll)
         i += 1
 
@@ -54,7 +55,7 @@ def downloadOneIllustor(url, isAll):
     print (illustor_name+" have "+ str(count) + ' illusts')
     number = count
     if not isAll:
-        number = int(input('how many illusts you want to download to your computer?'))
+        number = int(input(_printTab2+'how many illusts you want to download to your computer?'))
 
     for i in range(pages):
         response = session.get(j+str(i+1), headers = headers)
@@ -66,9 +67,9 @@ def downloadOneIllustor(url, isAll):
     tot = 1
     for illust in data:
         if tot > number:
-            print('WORK IS DONE!!')
+            print(_printTab2,'WORK IS DONE!!')
             break
-        print('('+str(tot)+'/'+str(number)+')')
+        print(_printTab2,'('+str(tot)+'/'+str(number)+')')
         tot += 1
         if illust.get('title') is not None:
             cover = illust.get('cover')
@@ -104,15 +105,15 @@ def downloadOneIllustor(url, isAll):
 
 #               print(file_name)
                 if os.path.isfile(file_name): 
-                    print ('>Image already exist = =')
+                    print (_printTab3,'>Image already exist = =')
                     continue
 
                 r=requests.get(downloadLink, headers=headers, allow_redirects=True)
                 try:
                     open(file_name, 'wb').write(r.content)
                 except:
-                    pass
-                print (name+hash_id+'_'+str(num)+tail+' download successfully!')
+                    print(_printTab3, "WARNNING: SOMETHING MISTAKE")
+                print (_printTab3,name+hash_id+'_'+str(num)+tail+' download successfully!')
 
 
 if __name__ == "__main__":
