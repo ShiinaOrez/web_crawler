@@ -55,7 +55,7 @@ def downloadOneIllustor(url, isAll):
     print (_printTab2,"|"+illustor_name+" have "+ str(count) + ' illusts')
     number = count
     if not isAll:
-        number = int(input(_printTab2+'|how many illusts you want to download to your computer?'))
+        number = int(input(_printTab2+' |how many illusts you want to download to your computer?'))
 
     for i in range(pages):
         response = session.get(j+str(i+1), headers = headers)
@@ -67,9 +67,9 @@ def downloadOneIllustor(url, isAll):
     tot = 1
     for illust in data:
         if tot > number:
-            print(_printTab2,'WORK IS DONE!!')
+            print(_printTab2,'----WORK IS DONE!!----')
             break
-        print(_printTab2,'('+str(tot)+'/'+str(number)+')')
+        print(_printTab1,'('+str(tot)+'/'+str(number)+')__')
         tot += 1
         if illust.get('title') is not None:
             cover = illust.get('cover')
