@@ -7,8 +7,6 @@ project_url = "https://www.artstation.com/projects/"
 # url = 'https://www.artstation.com/timbougami'
 # j = 'https://www.artstation.com/users/timbougami/projects.json?page=1'
 _printTab1 = "	"
-_printTab2 = _printTab1*2
-_printTab3 = _printTab1*3
 
 headers = {
     "origin": "https://www.artstation.com",
@@ -52,10 +50,10 @@ def downloadOneIllustor(url, isAll):
     pages = count//50
     if count%50 != 0:
         pages+=1
-    print (_printTab2,"|"+illustor_name+" have "+ str(count) + ' illusts')
+    print (_printTab1*2,"|"+illustor_name+" have "+ str(count) + ' illusts')
     number = count
     if not isAll:
-        number = int(input(_printTab2+' |how many illusts you want to download to your computer?'))
+        number = int(input(_printTab1*2+' |how many illusts you want to download to your computer?'))
 
     for i in range(pages):
         response = session.get(j+str(i+1), headers = headers)
@@ -67,9 +65,9 @@ def downloadOneIllustor(url, isAll):
     tot = 1
     for illust in data:
         if tot > number:
-            print(_printTab2,'----WORK IS DONE!!----')
+            print(_printTab1*2,'----WORK IS DONE!!----')
             break
-        print(_printTab2,'('+str(tot)+'/'+str(number)+')__')
+        print(_printTab1*3,'('+str(tot)+'/'+str(number)+')__')
         tot += 1
         if illust.get('title') is not None:
             cover = illust.get('cover')
@@ -90,13 +88,13 @@ def downloadOneIllustor(url, isAll):
             for downloadLink in downloadList:
                 num+=1
                 headers['referer'] = illust.get('permalink')
-                name = illust.get('title')+illust.get('hash_id')
+                name = illust.get('title')
                 tail = '.png'
                 if 'jpg' in downloadLink:
                     tail = '.jpg'
                 if '.gif' in downloadLink:
                     tail = '.gif'
-                file_name=file_path+name+hash_id+'_'+str(num)+tail
+                file_name=file_path+name+"_"+hash_id+'_'+str(num)+tail
 
                 file_name = file_name.replace('"','')
                 file_name = file_name.replace('/','')
@@ -105,15 +103,15 @@ def downloadOneIllustor(url, isAll):
 
 #               print(file_name)
                 if os.path.isfile(file_name): 
-                    print (_printTab3,'>Image already exist = =')
+                    print (_printTab1*4,'>Image already exist = =')
                     continue
 
                 r=requests.get(downloadLink, headers=headers, allow_redirects=True)
                 try:
                     open(file_name, 'wb').write(r.content)
                 except:
-                    print(_printTab3, "WARNNING: SOMETHING MISTAKE")
-                print (_printTab3,"|"+name+hash_id+'_'+str(num)+tail+' download successfully!')
+                    print(_printTab1*3, "WARNNING: SOMETHING MISTAKE")
+                print (_printTab1*4,"|"+name+"_"+hash_id+'_'+str(num)+tail+' download successfully!')
 
 
 if __name__ == "__main__":
