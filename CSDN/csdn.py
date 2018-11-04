@@ -16,19 +16,20 @@ for i in range(1,5):
     print (blog.status_code)
     blog_text=blog.text
     s=BeautifulSoup(blog_text,'html.parser')
-    for arti in s.find_all('li',class_='blog-unit'):
+#    print (blog_text)
+    for arti in s.find_all('div',class_='article-item-box csdn-tracking-statistics'):
+        if arti.attrs.get('style') is not None:
+            continue
         f.write("""
 =========="""+'\n')
         f.writelines('the article url:'+str(arti.a.attrs.get('href'))+'\n')
-        title=str(arti.a.h3.text)
-        span=arti.a.h3.span
+        title=str(arti.a.text)
+        """span=arti.a.h3.span
         if span is not None :
             title=title[16:]
-        else: title=title[7:] 
+        else: title=title[7:] """
         f.writelines('the article title:'+str(title)+'\n')
-        for div in arti.div.div.find_all('div'):
-            if div.i is not None:
-                if 'icon-read' in div.i.attrs.get('class') :
-                    f.writelines('visits:'+str(div.span.text)+'\n')
-                if 'icon-pinglun' in div.i.attrs.get('class') :
-                    f.writelines('comments:'+str(div.span.text)+'\n')
+        for div in arti.div.find_all('p'):
+            if div.span is not None:
+                if 'read-num' in div.span.attrs.get('class') :
+                    f.writelines(str(div.span.text)+'\n')
