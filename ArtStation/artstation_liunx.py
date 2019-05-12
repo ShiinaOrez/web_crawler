@@ -6,7 +6,9 @@ basedir=os.path.abspath(os.path.dirname(__file__))
 project_url = "https://www.artstation.com/projects/"
 # url = 'https://www.artstation.com/timbougami'
 # j = 'https://www.artstation.com/users/timbougami/projects.json?page=1'
-_printTab1 = "	"
+_printTab1 = "    "
+
+reverse_flag = False
 
 headers = {
     "origin": "https://www.artstation.com",
@@ -28,8 +30,11 @@ def call_main():
             break
         else:
             linkList.append(url)
+    reverse_mode = input("|Mode: Reverse ('Y/N')")
     check_mode = input("|Mode: Download All ('Y/N')")
     isAll = False
+    if ('y' in reverse_mode) or ('Y' in reverse_mode) or (reverse_mode is 'Y') or (reverse_mode is 'y'):
+        reverse_flag = True
     if ('y' in check_mode) or ('Y' in check_mode):
         isAll = True
     main_num = len(linkList)
@@ -61,7 +66,10 @@ def downloadOneIllustor(url, isAll):
             continue
         for re in response.json().get('data'):
             data.append(re)
-        
+    print(reverse_flag)
+    if reverse_flag:
+    	data.reverse()
+
     tot = 1
     for illust in data:
         if tot > number:
